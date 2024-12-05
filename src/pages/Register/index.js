@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "./register.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function RegisterForm() {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'email') {
+    console.log(name)
+    console.log(value)
+    if (name === "email") {
       setEmail(value);
-    } else if (name === 'username') {
+    } else if (name === "username") {
       setUsername(value);
-    } else if (name === 'password') {
+    } else if (name === "address") {
+      setAddress(value);
+    } else if (name === "password") {
       setPassword(value);
-    } else if (name === 'confirmPassword') {
+    } else if (name === "confirmPassword") {
       setConfirmPassword(value);
     }
   };
@@ -26,59 +31,63 @@ function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !username || !password || !confirmPassword) {
-      setError('Vui lòng điền tất cả thông tin.');
+    if (!email || !username || !password || !address || !confirmPassword) {
+      setError("Vui lòng điền tất cả thông tin.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Mật khẩu không khớp.');
+      setError("Mật khẩu không khớp.");
       return;
     }
-    setError(''); 
-    const response = await fetch('http://localhost:5000/users');
+    setError("");
+    const response = await fetch("http://localhost:5000/users");
     const users = await response.json();
-    const newId = users.length + 1; 
+    const newId = users.length + 1;
     const newUser = {
       id: `${newId}`,
       email,
       username,
       password,
+      address,
       friends: [],
       events: [],
+      image: "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
       friendGroups: {
         closeFriends: [],
         colleagues: [],
-        social: []
-      }
+        social: [],
+      },
+      friendRequests: []
     };
 
     try {
-      const response = await fetch('http://localhost:5000/users', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/users", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newUser),
       });
 
       if (response.ok) {
         setSuccess(true);
-        setEmail('');
-        setUsername('');
-        setPassword('');
-        setConfirmPassword('');
+        setEmail("");
+        setUsername("");
+        setPassword("");
+        setAddress("");
+        setConfirmPassword("");
       } else {
-        setError('Có lỗi xảy ra. Vui lòng thử lại.');
+        setError("Có lỗi xảy ra. Vui lòng thử lại.");
       }
     } catch (error) {
-      setError('Không thể kết nối đến máy chủ.');
+      setError("Không thể kết nối đến máy chủ.");
     }
   };
 
   return (
     <div className="register-form">
-      <h2>Đăng Ký Tài Khoản</h2>
+      <h2>Register Account</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
@@ -92,7 +101,7 @@ function RegisterForm() {
         </div>
 
         <div>
-          <label>Tên Người Dùng:</label>
+          <label>UserName:</label>
           <input
             type="text"
             name="username"
@@ -103,7 +112,18 @@ function RegisterForm() {
         </div>
 
         <div>
-          <label>Mật Khẩu:</label>
+          <label>Address:</label>
+          <input
+            type="text"
+            name="address"
+            value={address}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Password:</label>
           <input
             type="password"
             name="password"
@@ -114,7 +134,7 @@ function RegisterForm() {
         </div>
 
         <div>
-          <label>Xác Nhận Mật Khẩu:</label>
+          <label>Confirm Password:</label>
           <input
             type="password"
             name="confirmPassword"
@@ -125,12 +145,12 @@ function RegisterForm() {
         </div>
 
         {error && <p className="error">{error}</p>}
-        {success && <p className="success">Đăng ký thành công!</p>}
+        {success && <p className="success">Registration successful!</p>}
 
-        <button type="submit">Đăng Ký</button>
+        <button type="submit">Register</button>
         <p>
-        Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
-      </p>
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </form>
     </div>
   );

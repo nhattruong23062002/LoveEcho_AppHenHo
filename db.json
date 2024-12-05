@@ -25,7 +25,7 @@
       },
       "friendRequests": [
         {
-          "fromUserId": 2,
+          "fromUserId": 5,
           "toUserId": 1,
           "status": "pending",
           "friendType": "colleagues"
@@ -58,6 +58,11 @@
           "toUserId": 2,
           "status": "pending",
           "friendType": "colleagues"
+        },
+        {
+          "toUserId": "2",
+          "status": "pending",
+          "friendType": "bestfiend"
         }
       ]
     },
@@ -85,6 +90,11 @@
           "toUserId": 3,
           "status": "pending",
           "friendType": "social"
+        },
+        {
+          "toUserId": "3",
+          "status": "pending",
+          "friendType": "social"
         }
       ]
     },
@@ -108,16 +118,23 @@
           "toUserId": "ce24",
           "status": "pending",
           "friendType": "colleagues"
+        },
+        {
+          "toUserId": "4",
+          "status": "pending",
+          "friendType": "bestfiend"
         }
       ]
     },
     {
       "id": "5",
-      "email": "nhattr23062@gmail.com",
-      "username": "David Tran",
+      "email": "ngockhiem@gmail.com",
+      "username": "Ngoc Khiem",
       "password": "111111",
+      "address": "Da Nang, Viet Nam",
       "friends": [],
       "events": [],
+      "image": "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
       "friendGroups": {
         "closeFriends": [],
         "colleagues": [],
@@ -125,12 +142,27 @@
       },
       "friendRequests": [
         {
-          "fromUserId": 2,
-          "toUserId": "a2f8",
+          "toUserId": "5",
           "status": "pending",
-          "friendType": "colleagues"
+          "friendType": "social"
         }
       ]
+    },
+    {
+      "id": "6",
+      "email": "nhattran@gmail.com",
+      "username": "Nhan Tran",
+      "password": "222222",
+      "address": "Ha Noi, Viet Nam",
+      "friends": [],
+      "events": [],
+      "image": "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": []
     }
   ],
   "events": [

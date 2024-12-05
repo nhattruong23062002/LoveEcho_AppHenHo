@@ -1,0 +1,83 @@
+.friend-page {
+  padding: 20px;
+  margin-top: 50px;
+}
+
+.friend-requests,
+.friends-list {
+  margin-top: 20px;
+}
+
+.friend-request {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; 
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.friend-item:hover {
+  background-color: #f9f9f9; 
+}
+
+.avatar-friend {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; 
+  object-fit: cover; 
+  margin-right: 16px; 
+}
+
+.friend-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.friend-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.friend-address {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.avatar-friend-request {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover; 
+}
+
+.wrapper-button {
+  margin-left: 350px;
+}
+
+.button-accept {
+    background-color: green;
+    color: #fff;
+}
+
+.button-refuse {
+    background-color: red;
+    color: #fff;
+    margin-left: 20px;
+}
+

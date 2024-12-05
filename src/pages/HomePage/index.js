@@ -4,15 +4,17 @@ import { FaUserPlus, FaArrowRight } from "react-icons/fa";
 import axios from "axios";
 import "./homePage.css";
 import Layout from "../../layout/layout";
+import SelectTypeFriend from "../../components/SelectTypeFriend";
+import { notification } from "antd";
 
 function HomePage() {
   const [users, setUsers] = useState([]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [friendType, setFriendType] = useState(""); 
+  const user = localStorage.getItem("user");
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
     axios
       .get("http://localhost:5000/users")
       .then((response) => {
@@ -39,8 +41,36 @@ function HomePage() {
   const handleFriendTypeSelect = (type) => {
     setFriendType(type);
     setIsPopupVisible(false);
-    alert(`Bạn đã chọn: ${type}`); 
+    const selectedUser = users[currentUserIndex];
+    const selectedUserId = selectedUser.id;
+
+    const friendRequest = {
+      fromUserId: user.id, 
+      toUserId: selectedUserId, 
+      status: "pending",        
+      friendType: type,          
+    };
+    axios.patch(`http://localhost:5000/users/${selectedUserId}`, {
+        friendRequests: [...selectedUser.friendRequests, friendRequest],
+      })
+      .then((response) => {
+        console.log("Friend request sent:", response.data);
+        notification.success({
+          message: "Friend request sent!",
+          description: `You have sent a friend request of this type "${type}" to ${selectedUser.username}.`,
+          placement: "top",  
+        });
+      })
+      .catch((error) => {
+        console.error("Error sending friend request:", error);
+        notification.error({
+          message: "Error sending friend request",
+          description: "An error occurred while sending the friend request. Please try again.",
+          placement: "top",  
+        });
+      });
   };
+
 
   return (
     <Layout>
@@ -71,19 +101,11 @@ function HomePage() {
         )}
       </div>
 
-      {isPopupVisible && (
-        <div className="popup">
-          <div className="popup-content">
-            <h3>Select friend type</h3>
-            <ul>
-              <li onClick={() => handleFriendTypeSelect("Bạn thân")}>Best friend</li>
-              <li onClick={() => handleFriendTypeSelect("Đồng nghiệp")}>Colleague</li>
-              <li onClick={() => handleFriendTypeSelect("Bạn xã hội")}>Social friend</li>
-            </ul>
-            <button onClick={() => setIsPopupVisible(false)}>Close</button>
-          </div>
-        </div>
-      )}
+      <SelectTypeFriend 
+        isVisible={isPopupVisible} 
+        onClose={() => setIsPopupVisible(false)} 
+        onSelectFriendType={handleFriendTypeSelect} 
+      />
     </Layout>
   );
 }

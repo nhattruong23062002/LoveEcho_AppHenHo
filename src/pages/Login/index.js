@@ -33,7 +33,7 @@ function LoginForm() {
       const response = await fetch('http://localhost:5000/users');
       const users = await response.json();
       const user = users.find(user => user.email === email && user.password === password);
-      const { id, username, image, address } = user;
+      const { id, username, image, address, friends, friendRequests } = user;
 
       if (user) {
         navigate('/');
@@ -41,7 +41,7 @@ function LoginForm() {
         setError('');
         setEmail('');
         setPassword('');
-        localStorage.setItem('user', JSON.stringify({ id, username, email, image, address }));
+        localStorage.setItem('user', JSON.stringify({ id, username, email, image, address, friends, friendRequests }));
       } else {
         setError('Email hoặc mật khẩu không chính xác.');
       }
@@ -52,7 +52,7 @@ function LoginForm() {
 
   return (
     <div className="login-form">
-      <h2>Đăng Nhập</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
@@ -66,7 +66,7 @@ function LoginForm() {
         </div>
 
         <div>
-          <label>Mật Khẩu:</label>
+          <label>Password:</label>
           <input
             type="password"
             name="password"
@@ -77,11 +77,11 @@ function LoginForm() {
         </div>
 
         {error && <p className="error">{error}</p>}
-        {success && <p className="success">Đăng nhập thành công!</p>}
+        {success && <p className="success">Login success!</p>}
 
-        <button type="submit">Đăng Nhập</button>
+        <button type="submit">Login</button>
         <p>
-         Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>
+        Don't have an account? <Link to="/register">Sign up now</Link>
       </p>
       </form>
     </div>
