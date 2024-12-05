@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.login-page {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-image: url("https://allimages.sgp1.digitaloceanspaces.com/tipeduvn/2022/08/1661907047_835_Top-60-Hinh-nen-tinh-yeu-dep-lung-linh-khong.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

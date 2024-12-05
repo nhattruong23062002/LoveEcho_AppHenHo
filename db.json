@@ -1,0 +1,210 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "Jonh Doe",
+      "email": "john.doe@example.com",
+      "password": "123456",
+      "address": "Paris, France",
+      "friends": [
+        2,
+        3
+      ],
+      "events": [
+        1
+      ],
+      "image": "https://images2.thanhnien.vn/528068263637045248/2023/11/10/be2-16996417889381216952812.jpg",
+      "friendGroups": {
+        "closeFriends": [
+          2
+        ],
+        "colleagues": [],
+        "social": [
+          3
+        ]
+      },
+      "friendRequests": [
+        {
+          "fromUserId": 2,
+          "toUserId": 1,
+          "status": "pending",
+          "friendType": "colleagues"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "username": "jane_smith",
+      "email": "jane.smith@example.com",
+      "password": "123123",
+      "address": "New York, USA",
+      "friends": [
+        1
+      ],
+      "events": [
+        1
+      ],
+      "image": "https://kenh14cdn.com/2018/3/9/layer-12-15205908095681079448617.png",
+      "friendGroups": {
+        "closeFriends": [
+          1
+        ],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": [
+        {
+          "fromUserId": 3,
+          "toUserId": 2,
+          "status": "pending",
+          "friendType": "colleagues"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "username": "alex_lee",
+      "email": "alex.lee@example.com",
+      "friends": [
+        1
+      ],
+      "events": [],
+      "image": "https://img.docnhanh.vn/images/uploads/2024/02/20/anh-video/gentleman-5.jpg",
+      "password": "111111",
+      "address": "Seoul, Korea",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": [
+          1
+        ]
+      },
+      "friendRequests": [
+        {
+          "fromUserId": 2,
+          "toUserId": 3,
+          "status": "pending",
+          "friendType": "social"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "email": "nhattr2306@gmail.com",
+      "username": "nhattruong",
+      "password": "000000",
+      "address": "Tokyo, Japan",
+      "friends": [],
+      "events": [],
+      "image": "https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474095oee/hinh-anh-gai-han_100342280.jpg",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": [
+        {
+          "fromUserId": 2,
+          "toUserId": "ce24",
+          "status": "pending",
+          "friendType": "colleagues"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "email": "nhattr23062@gmail.com",
+      "username": "David Tran",
+      "password": "111111",
+      "friends": [],
+      "events": [],
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": [
+        {
+          "fromUserId": 2,
+          "toUserId": "a2f8",
+          "status": "pending",
+          "friendType": "colleagues"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "1",
+      "title": "Birthday Party",
+      "date": "2024-12-10T18:00:00",
+      "location": "John's House",
+      "guests": [
+        1,
+        2
+      ],
+      "reminders": [
+        {
+          "type": "email",
+          "timeBefore": "24h"
+        },
+        {
+          "type": "sms",
+          "timeBefore": "1h"
+        }
+      ],
+      "polls": {
+        "time": [
+          "2024-12-10T18:00:00",
+          "2024-12-10T19:00:00"
+        ],
+        "location": [
+          "John's House",
+          "Alex's Apartment"
+        ]
+      }
+    }
+  ],
+  "polls": [
+    {
+      "eventId": 1,
+      "type": "time",
+      "options": [
+        {
+          "time": "2024-12-10T18:00:00",
+          "votes": [
+            1,
+            2
+          ]
+        },
+        {
+          "time": "2024-12-10T19:00:00",
+          "votes": [
+            3
+          ]
+        }
+      ],
+      "id": "be3d"
+    },
+    {
+      "eventId": 1,
+      "type": "location",
+      "options": [
+        {
+          "location": "John's House",
+          "votes": [
+            1,
+            2
+          ]
+        },
+        {
+          "location": "Alex's Apartment",
+          "votes": [
+            3
+          ]
+        }
+      ],
+      "id": "10e2"
+    }
+  ]
+}
