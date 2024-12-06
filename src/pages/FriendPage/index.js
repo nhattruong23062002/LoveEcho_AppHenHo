@@ -1,113 +1,167 @@
-// src/pages/FriendPage/FriendPage.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { notification } from "antd";
 import { Button } from "antd";
 import Layout from "../../layout/layout";
 import "./FriendPage.css";
+import { getUserFromLocalStorage } from "../../utils/getUserFromLocalStorage";
+import { API_URL } from "../../config/configUrl";
 
 function FriendPage() {
-  const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
   const [friendRequests, setFriendRequests] = useState([]);
   const [friends, setFriends] = useState([]);
+  const user = getUserFromLocalStorage();
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
     if (user) {
-      const loggedInUser = JSON.parse(user);
-      setCurrentUser(loggedInUser);
-
-      const storedFriends = loggedInUser.friends || [];
-      const storedFriendRequests = loggedInUser.friendRequests || [];
+      const storedFriends = user.friends || [];
+      const storedFriendRequests = user.friendRequests || [];
 
       const friendsIds = storedFriends.map((id) => id.toString());
       const friendRequestsIds = storedFriendRequests
         .filter((request) => request.status === "pending")
         .map((request) => request.fromUserId.toString());
 
-      if (friendsIds.length > 0) {
-        axios
-          .get("http://localhost:5000/users")
-          .then((response) => {
-            const friendsDetails = response.data.filter((user) =>
-              friendsIds.includes(user.id)
-            );
-            setFriends(friendsDetails);
-          })
-          .catch((error) =>
-            console.error("Error fetching friends details:", error)
+      axios
+        .get(`${API_URL}/users`)
+        .then((response) => {
+          const friendsDetails = response.data.filter((user) =>
+            friendsIds.includes(user.id)
           );
-      }
-      if (friendRequestsIds.length > 0) {
-        axios
-          .get("http://localhost:5000/users")
-          .then((response) => {
-            const friendRequestsDetails = response.data.filter((user) =>
-              friendRequestsIds.includes(user.id)
-            );
-            console.log(friendRequestsDetails);
-            setFriendRequests(friendRequestsDetails);
-          })
-          .catch((error) =>
-            console.error("Error fetching friend requests details:", error)
+          const friendsWithType = friendsDetails.map((friend) => {
+            let typeFriend = "";
+
+            if (
+              friend.friendGroups.closeFriends &&
+              friend.friendGroups.closeFriends.includes(Number(user.id))
+            ) {
+              typeFriend = "Best Friend";
+            } else if (
+              friend.friendGroups.colleagues &&
+              friend.friendGroups.colleagues.includes(Number(user.id))
+            ) {
+              typeFriend = "Colleague";
+            } else if (
+              friend.friendGroups.social &&
+              friend.friendGroups.social.includes(Number(user.id))
+            ) {
+              typeFriend = "Social Friend";
+            }
+
+            return { ...friend, typeFriend };
+          });
+          setFriends(friendsWithType);
+        })
+        .catch((error) =>
+          console.error("Error fetching friends details:", error)
+        );
+
+      axios
+        .get(`${API_URL}/users`)
+        .then((response) => {
+          const friendRequestsDetails = response.data.filter((user) =>
+            friendRequestsIds.includes(user.id)
           );
-      }
+          setFriendRequests(friendRequestsDetails);
+        })
+        .catch((error) =>
+          console.error("Error fetching friend requests details:", error)
+        );
     }
   }, []);
 
   const handleAcceptRequest = (request) => {
-    const updatedRequest = { ...request, status: "accepted" };
-
-    axios
-      .patch(`http://localhost:5000/users/${request.fromUserId}`, {
-        friendRequests: request.fromUserId.friendRequests.map((r) =>
-          r.id === request.id ? updatedRequest : r
-        ),
-        friends: [...currentUser.friends, request.fromUserId], // Thêm bạn vào danh sách bạn bè
-      })
-      .then((response) => {
-        // Cập nhật lại danh sách bạn bè của người nhận
-        setFriendRequests(friendRequests.filter((r) => r.id !== request.id));
-        setFriends([...friends, request.fromUserId]);
-
+    const userId = Number(user.id);
+    const requestId = Number(request.id);
+  
+    const userFriendRequest = user.friendRequests.find(
+      (r) => r.fromUserId === requestId
+    );
+  
+    const friendType = userFriendRequest ? userFriendRequest.friendType : "";
+  
+    const validFriendType = friendType && (friendType === "closeFriends" || friendType === "colleagues" || friendType === "social") ? friendType : "others";
+  
+    const updatedUserFriendGroups = {
+      ...user.friendGroups,
+      [validFriendType]: [...(user.friendGroups[validFriendType] || []), requestId],
+    };
+  
+    const updatedRequestFriendGroups = {
+      ...request.friendGroups,
+      [validFriendType]: [...(request.friendGroups[validFriendType] || []), userId],
+    };
+  
+    const updateUserRequest = axios.patch(`${API_URL}/users/${userId}`, {
+      friendRequests: user.friendRequests.map((r) =>
+        r.fromUserId === requestId ? { ...r, status: "complete" } : r
+      ),
+      friends: [...user.friends, requestId],
+      friendGroups: updatedUserFriendGroups, 
+    });
+  
+    const updateFriendRequest = axios.patch(`${API_URL}/users/${requestId}`, {
+      friends: [...request.friends, userId],
+      friendGroups: updatedRequestFriendGroups, 
+    });
+  
+    Promise.all([updateUserRequest, updateFriendRequest])
+      .then(() => {
+        const updatedUser = {
+          ...user,
+          friendRequests: user.friendRequests.map((r) =>
+            r.fromUserId === requestId ? { ...r, status: "complete" } : r
+          ),
+          friends: [...user.friends, requestId],
+          friendGroups: updatedUserFriendGroups, 
+        };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+  
         notification.success({
-          message: "Yêu cầu kết bạn đã được chấp nhận!",
-          description: `${request.username} đã trở thành bạn của bạn.`,
+          message: "Friend request accepted!",
+          description: `${request.username} has become your friend.`,
           placement: "topRight",
         });
       })
       .catch((error) => {
-        console.error("Error accepting friend request:", error);
         notification.error({
-          message: "Lỗi khi chấp nhận yêu cầu kết bạn",
-          description: "Đã có lỗi xảy ra khi bạn chấp nhận yêu cầu kết bạn.",
+          message: "Error processing friend request",
+          description: "There was an error accepting the friend request.",
           placement: "topRight",
         });
       });
   };
+  
 
   const handleRejectRequest = (request) => {
+    const userId = Number(user.id);
+    const requestId = Number(request.id);
     axios
-      .patch(`http://localhost:5000/users/${request.fromUserId}`, {
-        friendRequests: request.fromUserId.friendRequests.filter(
-          (r) => r.id !== request.id
+      .patch(`${API_URL}/users/${userId}`, {
+        friendRequests: user.friendRequests.map((r) =>
+          r.fromUserId === requestId ? { ...r, status: "cancel" } : r
         ),
       })
       .then((response) => {
-        setFriendRequests(friendRequests.filter((r) => r.id !== request.id));
+        const updatedUser = {
+          ...user,
+          friendRequests: user.friendRequests.map((r) =>
+            r.fromUserId === requestId ? { ...r, status: "cancel" } : r
+          ),
+        };
+
+        localStorage.setItem("user", JSON.stringify(updatedUser));
 
         notification.info({
-          message: "Yêu cầu kết bạn đã bị từ chối",
-          description: `${request.fromUserId} đã bị từ chối kết bạn.`,
+          message: "Friend request declined",
+          description: `${request.username} was rejected as a friend.`,
           placement: "topRight",
         });
       })
       .catch((error) => {
-        console.error("Error rejecting friend request:", error);
         notification.error({
-          message: "Lỗi khi từ chối yêu cầu kết bạn",
-          description: "Đã có lỗi xảy ra khi bạn từ chối yêu cầu kết bạn.",
+          message: "Error when rejecting friend request",
+          description: "An error occurred while rejecting the friend request.",
           placement: "topRight",
         });
       });
@@ -132,13 +186,19 @@ function FriendPage() {
                   <p className="friend-name">{request.username}</p>
                   <p className="friend-address">{request.address}</p>
                 </div>
-                <div className="wrapper-button"> 
-                <Button className="button-accept" onClick={() => handleAcceptRequest(request)}>
-                  Accept
-                </Button>
-                <Button className="button-refuse" onClick={() => handleRejectRequest(request)}>
-                  Refuse
-                </Button>
+                <div className="wrapper-button">
+                  <Button
+                    className="button-accept"
+                    onClick={() => handleAcceptRequest(request)}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    className="button-refuse"
+                    onClick={() => handleRejectRequest(request)}
+                  >
+                    Refuse
+                  </Button>
                 </div>
               </div>
             ))
@@ -161,6 +221,7 @@ function FriendPage() {
                   <p className="friend-name">{friend.username}</p>
                   <p className="friend-address">{friend.address}</p>
                 </div>
+                <i className="type-friend">{friend.typeFriend}</i>
               </div>
             ))
           )}

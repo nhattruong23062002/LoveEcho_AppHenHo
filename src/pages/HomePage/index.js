@@ -6,23 +6,29 @@ import "./homePage.css";
 import Layout from "../../layout/layout";
 import SelectTypeFriend from "../../components/SelectTypeFriend";
 import { notification } from "antd";
+import { getUserFromLocalStorage } from "../../utils/getUserFromLocalStorage";
+import { API_URL } from "../../config/configUrl";
 
 function HomePage() {
   const [users, setUsers] = useState([]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [friendType, setFriendType] = useState(""); 
-  const user = localStorage.getItem("user");
-
+  const user = getUserFromLocalStorage();
+  
   useEffect(() => {
     axios
-      .get("http://localhost:5000/users")
+      .get(`${API_URL}/users`)
       .then((response) => {
-        const loggedInUser = user ? JSON.parse(user) : null;
-        const filteredUsers = loggedInUser
-          ? response.data.filter((user) => user.email !== loggedInUser.email)
-          : response.data;
-        setUsers(filteredUsers);
+        const filteredUsers = user
+        ? response.data.filter(
+            (u) =>
+              u.email !== user.email && !user.friends.includes(Number(u.id))
+          )
+        : response.data;
+
+      setUsers(filteredUsers);
+      console.log("filteredUsers",filteredUsers)
         if (filteredUsers.length > 0) {
           setCurrentUserIndex(Math.floor(Math.random() * filteredUsers.length));
         }
@@ -42,15 +48,16 @@ function HomePage() {
     setFriendType(type);
     setIsPopupVisible(false);
     const selectedUser = users[currentUserIndex];
-    const selectedUserId = selectedUser.id;
+    const selectedUserId = Number(selectedUser.id);
+    const fromUserId = Number(user.id);
 
     const friendRequest = {
-      fromUserId: user.id, 
+      fromUserId: fromUserId, 
       toUserId: selectedUserId, 
       status: "pending",        
       friendType: type,          
     };
-    axios.patch(`http://localhost:5000/users/${selectedUserId}`, {
+    axios.patch(`${API_URL}/users/${selectedUserId}`, {
         friendRequests: [...selectedUser.friendRequests, friendRequest],
       })
       .then((response) => {

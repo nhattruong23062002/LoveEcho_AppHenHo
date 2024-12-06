@@ -9,7 +9,7 @@ const SelectTypeFriend = ({ isVisible, onClose, onSelectFriendType }) => {
       <div className="popup-content">
         <h3>Select friend type</h3>
         <ul>
-          <li onClick={() => onSelectFriendType("bestfiend")}>Best friend</li>
+          <li onClick={() => onSelectFriendType("closeFriends")}>Best friend</li>
           <li onClick={() => onSelectFriendType("colleagues")}>Colleague</li>
           <li onClick={() => onSelectFriendType("social")}>Social friend</li>
         </ul>

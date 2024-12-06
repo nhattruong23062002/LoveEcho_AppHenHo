@@ -6,6 +6,7 @@ import RegisterForm from './pages/Register';
 import HomePage from './pages/HomePage';
 import Profile from './pages/Profile';
 import FriendPage from './pages/FriendPage';
+import EventPage from './pages/EventPage';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/friends" element={<FriendPage />} />
-          <Route path="/events" element={<HomePage />} />
+          <Route path="/events" element={<EventPage />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/login" element={<div className="login-page"><LoginForm /></div>} />
           <Route path="/register" element={<div className="login-page"><RegisterForm /></div>} />

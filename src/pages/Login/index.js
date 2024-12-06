@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./login.css"
+import { API_URL } from '../../config/configUrl';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -30,10 +31,10 @@ function LoginForm() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/users');
+      const response = await fetch(`${API_URL}/users`);
       const users = await response.json();
       const user = users.find(user => user.email === email && user.password === password);
-      const { id, username, image, address, friends, friendRequests } = user;
+      const { id, username, image, address, friends, friendRequests, friendGroups } = user;
 
       if (user) {
         navigate('/');
@@ -41,7 +42,7 @@ function LoginForm() {
         setError('');
         setEmail('');
         setPassword('');
-        localStorage.setItem('user', JSON.stringify({ id, username, email, image, address, friends, friendRequests }));
+        localStorage.setItem('user', JSON.stringify({ id, username, email, image, address, friends, friendRequests, friendGroups }));
       } else {
         setError('Email hoặc mật khẩu không chính xác.');
       }

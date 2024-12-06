@@ -4,6 +4,7 @@ import axios from "axios"; // Import axios
 import "./profile.css"; // Import file CSS
 import Layout from "../../layout/layout";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../config/configUrl";
 
 function Profile() {
   const [user, setUser] = useState({});
@@ -39,7 +40,7 @@ function Profile() {
   const handleSaveChanges = async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:5000/users/${savedUser.id}`,
+        `${API_URL}/users/${savedUser.id}`,
         updatedUser
       );
 

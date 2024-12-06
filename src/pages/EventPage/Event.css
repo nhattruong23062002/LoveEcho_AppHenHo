@@ -1,0 +1,96 @@
+.event-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.create-event-button {
+  margin-bottom: 20px;
+}
+
+.event-list {
+  margin-top: 20px;
+}
+
+button.ant-btn.ant-btn-text {
+  font-size: 14px;
+}
+
+input.ant-input {
+  width: 100%;
+}
+
+button.ant-btn.ant-btn-text {
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.add-option {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
+
+.event-item {
+  background-color: #daf4ff;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.event-item:hover {
+  background-color: #e6f7ff;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.event-item h4 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.event-item p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.options button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.options button:hover {
+  background-color: #0056b3;
+}
+
+.options .ant-checkbox-wrapper {
+  font-size: 1rem;
+  padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .event-item {
+    padding: 10px;
+  }
+
+  .options button {
+    width: 100%;
+  }
+}

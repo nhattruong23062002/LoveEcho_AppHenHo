@@ -8,7 +8,8 @@
       "address": "Paris, France",
       "friends": [
         2,
-        3
+        3,
+        4
       ],
       "events": [
         1
@@ -18,7 +19,9 @@
         "closeFriends": [
           2
         ],
-        "colleagues": [],
+        "colleagues": [
+          4
+        ],
         "social": [
           3
         ]
@@ -27,7 +30,25 @@
         {
           "fromUserId": 5,
           "toUserId": 1,
-          "status": "pending",
+          "status": "cancel",
+          "friendType": "colleagues"
+        },
+        {
+          "fromUserId": 4,
+          "toUserId": 1,
+          "status": "complete",
+          "friendType": "colleagues"
+        },
+        {
+          "fromUserId": 4,
+          "toUserId": 1,
+          "status": "complete",
+          "friendType": "social"
+        },
+        {
+          "fromUserId": 6,
+          "toUserId": 1,
+          "status": "cancel",
           "friendType": "colleagues"
         }
       ]
@@ -58,11 +79,6 @@
           "toUserId": 2,
           "status": "pending",
           "friendType": "colleagues"
-        },
-        {
-          "toUserId": "2",
-          "status": "pending",
-          "friendType": "bestfiend"
         }
       ]
     },
@@ -90,11 +106,6 @@
           "toUserId": 3,
           "status": "pending",
           "friendType": "social"
-        },
-        {
-          "toUserId": "3",
-          "status": "pending",
-          "friendType": "social"
         }
       ]
     },
@@ -104,25 +115,24 @@
       "username": "nhattruong",
       "password": "000000",
       "address": "Tokyo, Japan",
-      "friends": [],
+      "friends": [
+        1
+      ],
       "events": [],
       "image": "https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474095oee/hinh-anh-gai-han_100342280.jpg",
       "friendGroups": {
         "closeFriends": [],
-        "colleagues": [],
+        "colleagues": [
+          1
+        ],
         "social": []
       },
       "friendRequests": [
         {
-          "fromUserId": 2,
-          "toUserId": "ce24",
-          "status": "pending",
-          "friendType": "colleagues"
-        },
-        {
-          "toUserId": "4",
-          "status": "pending",
-          "friendType": "bestfiend"
+          "fromUserId": 1,
+          "toUserId": 4,
+          "status": "cancel",
+          "friendType": "social"
         }
       ]
     },
@@ -142,9 +152,10 @@
       },
       "friendRequests": [
         {
-          "toUserId": "5",
+          "fromUserId": 1,
+          "toUserId": 5,
           "status": "pending",
-          "friendType": "social"
+          "friendType": "closeFriends"
         }
       ]
     },
@@ -167,76 +178,27 @@
   ],
   "events": [
     {
-      "id": "1",
-      "title": "Birthday Party",
-      "date": "2024-12-10T18:00:00",
-      "location": "John's House",
-      "guests": [
-        1,
-        2
-      ],
-      "reminders": [
-        {
-          "type": "email",
-          "timeBefore": "24h"
-        },
-        {
-          "type": "sms",
-          "timeBefore": "1h"
-        }
-      ],
-      "polls": {
-        "time": [
-          "2024-12-10T18:00:00",
-          "2024-12-10T19:00:00"
-        ],
-        "location": [
-          "John's House",
-          "Alex's Apartment"
-        ]
-      }
-    }
-  ],
-  "polls": [
-    {
-      "eventId": 1,
-      "type": "time",
+      "id": "zsew3f",
+      "name": "William Clark",
       "options": [
         {
-          "time": "2024-12-10T18:00:00",
-          "votes": [
-            1,
-            2
-          ]
+          "id": "option-0",
+          "name": "Nhà Nhật",
+          "status": "pending",
+          "votes": 0
         },
         {
-          "time": "2024-12-10T19:00:00",
-          "votes": [
-            3
-          ]
+          "id": "option-1",
+          "name": "Nhà Nga",
+          "status": "pending",
+          "votes": 0
         }
       ],
-      "id": "be3d"
-    },
-    {
-      "eventId": 1,
-      "type": "location",
-      "options": [
-        {
-          "location": "John's House",
-          "votes": [
-            1,
-            2
-          ]
-        },
-        {
-          "location": "Alex's Apartment",
-          "votes": [
-            3
-          ]
-        }
-      ],
-      "id": "10e2"
+      "friends": [
+        2,
+        3,
+        1
+      ]
     }
   ]
 }

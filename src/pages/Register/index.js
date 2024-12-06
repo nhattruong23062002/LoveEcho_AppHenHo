@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./register.css";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../config/configUrl";
 
 function RegisterForm() {
   const [email, setEmail] = useState("");
@@ -41,7 +42,7 @@ function RegisterForm() {
       return;
     }
     setError("");
-    const response = await fetch("http://localhost:5000/users");
+    const response = await fetch(`${API_URL}/users`);
     const users = await response.json();
     const newId = users.length + 1;
     const newUser = {
@@ -62,7 +63,7 @@ function RegisterForm() {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/users", {
+      const response = await fetch(`${API_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
