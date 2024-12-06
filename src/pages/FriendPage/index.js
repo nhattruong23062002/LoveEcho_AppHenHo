@@ -10,6 +10,7 @@ import { API_URL } from "../../config/configUrl";
 function FriendPage() {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [updateFlag, setUpdateFlag] = useState(false);
   const user = getUserFromLocalStorage();
 
   useEffect(() => {
@@ -30,7 +31,6 @@ function FriendPage() {
           );
           const friendsWithType = friendsDetails.map((friend) => {
             let typeFriend = "";
-
             if (
               friend.friendGroups.closeFriends &&
               friend.friendGroups.closeFriends.includes(Number(user.id))
@@ -68,7 +68,7 @@ function FriendPage() {
           console.error("Error fetching friend requests details:", error)
         );
     }
-  }, []);
+  }, [updateFlag]);
 
   const handleAcceptRequest = (request) => {
     const userId = Number(user.id);
@@ -116,13 +116,14 @@ function FriendPage() {
           friendGroups: updatedUserFriendGroups, 
         };
         localStorage.setItem("user", JSON.stringify(updatedUser));
-  
         notification.success({
           message: "Friend request accepted!",
           description: `${request.username} has become your friend.`,
           placement: "topRight",
         });
+        setUpdateFlag((prev) => !prev); 
       })
+      
       .catch((error) => {
         notification.error({
           message: "Error processing friend request",
@@ -157,6 +158,7 @@ function FriendPage() {
           description: `${request.username} was rejected as a friend.`,
           placement: "topRight",
         });
+        setUpdateFlag((prev) => !prev); 
       })
       .catch((error) => {
         notification.error({

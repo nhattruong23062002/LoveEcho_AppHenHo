@@ -7,20 +7,19 @@
       "password": "123456",
       "address": "Paris, France",
       "friends": [
-        2,
         3,
-        4
+        4,
+        2
       ],
       "events": [
         1
       ],
       "image": "https://images2.thanhnien.vn/528068263637045248/2023/11/10/be2-16996417889381216952812.jpg",
       "friendGroups": {
-        "closeFriends": [
-          2
-        ],
+        "closeFriends": [],
         "colleagues": [
-          4
+          4,
+          2
         ],
         "social": [
           3
@@ -28,27 +27,9 @@
       },
       "friendRequests": [
         {
-          "fromUserId": 5,
-          "toUserId": 1,
-          "status": "cancel",
-          "friendType": "colleagues"
-        },
-        {
-          "fromUserId": 4,
+          "fromUserId": 2,
           "toUserId": 1,
           "status": "complete",
-          "friendType": "colleagues"
-        },
-        {
-          "fromUserId": 4,
-          "toUserId": 1,
-          "status": "complete",
-          "friendType": "social"
-        },
-        {
-          "fromUserId": 6,
-          "toUserId": 1,
-          "status": "cancel",
           "friendType": "colleagues"
         }
       ]
@@ -60,6 +41,7 @@
       "password": "123123",
       "address": "New York, USA",
       "friends": [
+        1,
         1
       ],
       "events": [
@@ -70,7 +52,9 @@
         "closeFriends": [
           1
         ],
-        "colleagues": [],
+        "colleagues": [
+          1
+        ],
         "social": []
       },
       "friendRequests": [
@@ -131,7 +115,7 @@
         {
           "fromUserId": 1,
           "toUserId": 4,
-          "status": "cancel",
+          "status": "complete",
           "friendType": "social"
         }
       ]
@@ -178,18 +162,42 @@
   ],
   "events": [
     {
-      "id": "zsew3f",
-      "name": "William Clark",
+      "id": "slz9fq",
+      "name": "Eat Lunch",
       "options": [
         {
           "id": "option-0",
-          "name": "Nhà Nhật",
+          "name": "Home A",
           "status": "pending",
           "votes": 0
         },
         {
           "id": "option-1",
-          "name": "Nhà Nga",
+          "name": "Home B",
+          "status": "pending",
+          "votes": 0
+        }
+      ],
+      "friends": [
+        2,
+        4,
+        3,
+        1
+      ]
+    },
+    {
+      "id": "0v1f3w",
+      "name": "Eat Dinner",
+      "options": [
+        {
+          "id": "option-0",
+          "name": "Home Nguyen",
+          "status": "pending",
+          "votes": 0
+        },
+        {
+          "id": "option-1",
+          "name": "Home Hung",
           "status": "pending",
           "votes": 0
         }
