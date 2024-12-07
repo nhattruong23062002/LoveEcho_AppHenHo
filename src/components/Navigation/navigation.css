@@ -45,12 +45,3 @@
 .nav-item a:hover svg {
   transform: scale(1.2);
 }
-
-.search-input {
-  position: absolute;
-  border-radius: 10px;
-  margin-top: 130px;
-  width: 99%;
-  border: none;
-  height: 50px;
-}

@@ -6,6 +6,8 @@ import Layout from "../../layout/layout";
 import "./FriendPage.css";
 import { getUserFromLocalStorage } from "../../utils/getUserFromLocalStorage";
 import { API_URL } from "../../config/configUrl";
+import SearchInput from "../../components/InputSearch";
+import FriendsList from "../../components/FriendsList";
 
 function FriendPage() {
   const [friendRequests, setFriendRequests] = useState([]);
@@ -29,12 +31,16 @@ function FriendPage() {
           const friendsDetails = response.data.filter((user) =>
             friendsIds.includes(user.id)
           );
+          console.log('friendsDetails',friendsDetails)
           const friendsWithType = friendsDetails.map((friend) => {
             let typeFriend = "";
+            console.log("A", friend.friendGroups.closeFriends);
+            console.log("B", friend.friendGroups.social.includes(Number(user.id)));
             if (
               friend.friendGroups.closeFriends &&
               friend.friendGroups.closeFriends.includes(Number(user.id))
             ) {
+              console.log("HIHI")
               typeFriend = "Best Friend";
             } else if (
               friend.friendGroups.colleagues &&
@@ -45,9 +51,9 @@ function FriendPage() {
               friend.friendGroups.social &&
               friend.friendGroups.social.includes(Number(user.id))
             ) {
+              console.log("HAHA")
               typeFriend = "Social Friend";
             }
-
             return { ...friend, typeFriend };
           });
           setFriends(friendsWithType);
@@ -73,38 +79,38 @@ function FriendPage() {
   const handleAcceptRequest = (request) => {
     const userId = Number(user.id);
     const requestId = Number(request.id);
-  
+
     const userFriendRequest = user.friendRequests.find(
       (r) => r.fromUserId === requestId
     );
-  
+
     const friendType = userFriendRequest ? userFriendRequest.friendType : "";
-  
+
     const validFriendType = friendType && (friendType === "closeFriends" || friendType === "colleagues" || friendType === "social") ? friendType : "others";
-  
+
     const updatedUserFriendGroups = {
       ...user.friendGroups,
       [validFriendType]: [...(user.friendGroups[validFriendType] || []), requestId],
     };
-  
+
     const updatedRequestFriendGroups = {
       ...request.friendGroups,
       [validFriendType]: [...(request.friendGroups[validFriendType] || []), userId],
     };
-  
+
     const updateUserRequest = axios.patch(`${API_URL}/users/${userId}`, {
       friendRequests: user.friendRequests.map((r) =>
         r.fromUserId === requestId ? { ...r, status: "complete" } : r
       ),
       friends: [...user.friends, requestId],
-      friendGroups: updatedUserFriendGroups, 
+      friendGroups: updatedUserFriendGroups,
     });
-  
+
     const updateFriendRequest = axios.patch(`${API_URL}/users/${requestId}`, {
       friends: [...request.friends, userId],
-      friendGroups: updatedRequestFriendGroups, 
+      friendGroups: updatedRequestFriendGroups,
     });
-  
+
     Promise.all([updateUserRequest, updateFriendRequest])
       .then(() => {
         const updatedUser = {
@@ -113,7 +119,7 @@ function FriendPage() {
             r.fromUserId === requestId ? { ...r, status: "complete" } : r
           ),
           friends: [...user.friends, requestId],
-          friendGroups: updatedUserFriendGroups, 
+          friendGroups: updatedUserFriendGroups,
         };
         localStorage.setItem("user", JSON.stringify(updatedUser));
         notification.success({
@@ -121,9 +127,8 @@ function FriendPage() {
           description: `${request.username} has become your friend.`,
           placement: "topRight",
         });
-        setUpdateFlag((prev) => !prev); 
+        setUpdateFlag((prev) => !prev);
       })
-      
       .catch((error) => {
         notification.error({
           message: "Error processing friend request",
@@ -132,7 +137,6 @@ function FriendPage() {
         });
       });
   };
-  
 
   const handleRejectRequest = (request) => {
     const userId = Number(user.id);
@@ -158,7 +162,7 @@ function FriendPage() {
           description: `${request.username} was rejected as a friend.`,
           placement: "topRight",
         });
-        setUpdateFlag((prev) => !prev); 
+        setUpdateFlag((prev) => !prev);
       })
       .catch((error) => {
         notification.error({
@@ -208,26 +212,12 @@ function FriendPage() {
         </div>
 
         <h2>Friends List</h2>
-        <div className="friends-list">
-          {friends.length === 0 ? (
-            <p>No friends yet.</p>
-          ) : (
-            friends.map((friend) => (
-              <div key={friend.id} className="friend-item">
-                <img
-                  className="avatar-friend"
-                  src={friend.image}
-                  alt={friend.username}
-                />
-                <div className="friend-info">
-                  <p className="friend-name">{friend.username}</p>
-                  <p className="friend-address">{friend.address}</p>
-                </div>
-                <i className="type-friend">{friend.typeFriend}</i>
-              </div>
-            ))
-          )}
-        </div>
+        <SearchInput setFriendsList={setFriends} />
+        <FriendsList
+          friends={friends}
+          onAcceptRequest={handleAcceptRequest}
+          onRejectRequest={handleRejectRequest}
+        />
       </div>
     </Layout>
   );

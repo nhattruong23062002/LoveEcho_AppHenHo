@@ -1,29 +1,22 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Input,
-  Modal,
-  Form,
-  Select,
-  notification,
-  Checkbox,
-} from "antd";
-import { PlusOutlined, CloseOutlined } from "@ant-design/icons";
+import { Button, notification, Radio } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import "./Event.css";
 import Layout from "../../layout/layout";
 import axios from "axios";
 import { API_URL } from "../../config/configUrl";
 import { getUserFromLocalStorage } from "../../utils/getUserFromLocalStorage";
+import CreateEventModal from "../../components/ModalEvent";
+import MiniGame from "../../components/MiniGame";
 
 const EventPage = () => {
   const [events, setEvents] = useState([]);
   const [showCreateEventModal, setShowCreateEventModal] = useState(false);
-  const [eventForm] = Form.useForm();
   const [options, setOptions] = useState([""]);
   const [friendsList, setFriendsList] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [user, setUser] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState({}); // state cho selectedOption theo từng sự kiện
 
   useEffect(() => {
     const userFromStorage = getUserFromLocalStorage();
@@ -43,6 +36,7 @@ const EventPage = () => {
           console.error("Error fetching friends details:", error);
         });
     }
+
     axios
       .get(`${API_URL}/events`)
       .then((response) => {
@@ -74,9 +68,9 @@ const EventPage = () => {
       .catch((error) => {
         console.error("Error fetching events:", error);
         notification.error({
-          message: "Lỗi khi tải sự kiện",
+          message: "Error loading event",
           description:
-            "Không thể tải các sự kiện từ server. Vui lòng thử lại sau.",
+            "Unable to load events from server. Please try again later.",
         });
       });
   }, []);
@@ -89,78 +83,65 @@ const EventPage = () => {
     setShowCreateEventModal(false);
   };
 
-  const handleCreateEvent = (values) => {
-    const newEvent = {
-      id: Math.random().toString(36).substring(7),
-      name: values.name,
-      options: options.map((option, index) => ({
-        id: `option-${index}`,
-        name: option,
-        status: "pending",
-        votes: 0,
-      })),
-      friends: [...selectedFriends, Number(user.id)],
-    };
-    axios
-      .post(`${API_URL}/events`, newEvent)
-      .then((response) => {
-        setEvents([...events, response.data]);
-        notification.success({
-          message: "Sự kiện đã được tạo!",
-          description: `Sự kiện "${values.name}" đã được tạo thành công.`,
-        });
-        setShowCreateEventModal(false);
-        eventForm.resetFields();
-        setOptions([""]);
-        setSelectedFriends([]);
-      })
-      .catch((error) => {
-        notification.error({
-          message: "Tạo sự kiện thất bại",
-          description: "Đã có lỗi xảy ra khi tạo sự kiện. Vui lòng thử lại!",
-        });
-      });
+  const handleCreateEvent = (newEvent) => {
+    setEvents([...events, newEvent]);
   };
 
-  const handleAddOption = () => {
-    if (options.length < 3) {
-      setOptions([...options, ""]);
+  const updateEventList = (updatedEvent) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.id === updatedEvent.id ? updatedEvent : event
+      )
+    );
+  };
+
+  const handleVote = async (eventId, optionId) => {
+    try {
+      const updatedEvents = events.map((event) => {
+        if (event.id === eventId) {
+          const updatedOptions = event.options.map((option) => {
+            if (option.id === optionId) {
+              return { ...option, votes: option.votes + 1 };
+            }
+            return option;
+          });
+          return { ...event, options: updatedOptions, voted: true };
+        }
+        return event;
+      });
+
+      setEvents(updatedEvents);
+
+      await axios.patch(`${API_URL}/events/${eventId}`, {
+        options: updatedEvents.find((event) => event.id === eventId).options,
+      });
+
+      notification.success({
+        message: "Vote successful!",
+        description: `You voted for the option "${optionId}".`,
+      });
+    } catch (error) {
+      console.error("Error updating vote:", error);
+      notification.error({
+        message: "Error while voting",
+        description: "An error occurred while voting. Please try again.",
+      });
     }
   };
 
-  const handleOptionChange = (index, value) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
+  const checkForTie = (options) => {
+    if (options.length > 1) {
+      const voteCount = options.map((option) => option.votes);
+      return voteCount.every((vote, i, arr) => vote === arr[0]);
+    }
+    return false;
   };
 
-  const handleRemoveOption = (index) => {
-    const newOptions = options.filter((_, idx) => idx !== index);
-    setOptions(newOptions);
-  };
-
-  const handleFriendChange = (value) => {
-    setSelectedFriends(value);
-  };
-
-  const handleVote = (eventId, optionId) => {
-    const updatedEvents = events.map((event) => {
-      if (event.id === eventId) {
-        const updatedOptions = event.options.map((option) => {
-          if (option.id === optionId) {
-            return { ...option, status: "pending", votes: option.votes + 1 };
-          }
-          return option;
-        });
-        return { ...event, options: updatedOptions };
-      }
-      return event;
-    });
-    setEvents(updatedEvents);
-    notification.success({
-      message: "Bình chọn thành công!",
-      description: `Bạn đã bình chọn cho phương án "${optionId}".`,
-    });
+  const handleOptionChange = (eventId, selectedOption) => {
+    setSelectedOptions((prevState) => ({
+      ...prevState,
+      [eventId]: selectedOption,
+    }));
   };
 
   return (
@@ -176,130 +157,65 @@ const EventPage = () => {
           Create an event calendar
         </Button>
 
-        <Modal
-          title="Create new event"
+        <CreateEventModal
           visible={showCreateEventModal}
           onCancel={handleCancel}
-          footer={null}
-        >
-          <Form form={eventForm} layout="vertical" onFinish={handleCreateEvent}>
-            <Form.Item
-              label="Event Name"
-              name="name"
-              rules={[{ required: true, message: "Please enter event name!" }]}
-            >
-              <Input placeholder="Enter event name" />
-            </Form.Item>
-
-            <Form.Item label="Phương án (Options)" name="options">
-              <div>
-                {options.map((option, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      marginBottom: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Input
-                      value={option}
-                      placeholder={`Option ${index + 1}`}
-                      onChange={(e) =>
-                        handleOptionChange(index, e.target.value)
-                      }
-                    />
-                    <Button
-                      type="text"
-                      icon={<CloseOutlined />}
-                      onClick={() => handleRemoveOption(index)}
-                      style={{ marginLeft: 8, color: "red" }}
-                    />
-                  </div>
-                ))}
-                {options.length < 3 && (
-                  <Button
-                    className="add-option"
-                    type="link"
-                    onClick={handleAddOption}
-                  >
-                    Thêm phương án
-                  </Button>
-                )}
-              </div>
-            </Form.Item>
-
-            <Form.Item
-              label="Chọn bạn bè tham gia"
-              name="friends"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select friends to join the event!",
-                },
-              ]}
-            >
-              <Select
-                mode="multiple"
-                placeholder="Select friends"
-                value={selectedFriends}
-                onChange={handleFriendChange}
-                options={friendsList.map((friend) => ({
-                  label: friend.username,
-                  value: Number(friend.id),
-                }))}
-              />
-            </Form.Item>
-
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: "100%" }}
-              >
-                Create event
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+          onCreate={handleCreateEvent}
+          friendsList={friendsList}
+          user={user}
+          options={options}
+          setOptions={setOptions}
+          selectedFriends={selectedFriends}
+          setSelectedFriends={setSelectedFriends}
+        />
 
         <h3>List of upcoming events</h3>
         <div className="event-list">
-          {events.map((event) => (
-            <div key={event.id} className="event-item">
-              <h4>{event.name}</h4>
-              <p>
-                Participants:{" "}
-                {event.friendsDetails
-                  .map((e) => {
-                    return e.username;
-                  })
-                  .join(", ")}
-              </p>
-              <div className="options">
-                {event.options.map((option) => (
-                  <div key={option.id} style={{ marginBottom: "8px" }}>
-                    <Checkbox
-                      value={option.id}
-                      onChange={(e) => setSelectedOption(e.target.value)}
-                      disabled={event.options.length === 1}
+          {events?.map((event) => {
+            const isTie = checkForTie(event.options);
+
+            const disableRadioButtons = event.options.some(option => option.status === "selected");
+
+            const showMiniGame = !event.options.some(option => option.status === "selected");
+
+            return (
+              <div key={event.id} className="event-item">
+                <h4>{event.name}</h4>
+                <p>
+                  Participants:{" "}
+                  {event.friendsDetails?.length > 0
+                    ? event.friendsDetails.map((e) => e.username).join(", ")
+                    : "No participants yet"}
+                </p>
+                <div className="options">
+                  {event.options?.map((option) => (
+                    <div key={option.id} style={{ marginBottom: "8px" }}>
+                      <Radio
+                        value={option.id}
+                        onChange={(e) => handleOptionChange(event.id, e.target.value)}
+                        disabled={disableRadioButtons || event.voted || event.options.length === 1}
+                        checked={selectedOptions[event.id] === option.id || option.status === "selected"}
+                      >
+                        {option.name} (Votes: {option.votes})
+                      </Radio>
+                    </div>
+                  ))}
+
+                  {isTie && showMiniGame && <MiniGame options={event.options} eventId={event.id} updateEventList={updateEventList}/>}
+
+                  {event.options?.length > 1 && !event.voted && (
+                    <Button
+                      type="primary"
+                      onClick={() => handleVote(event.id, selectedOptions[event.id])}
+                      disabled={!selectedOptions[event.id]}
                     >
-                      {option.name} (Votes: {option.votes})
-                    </Checkbox>
-                  </div>
-                ))}
-                {event.options.length > 1 && (
-                  <Button
-                    type="primary"
-                    onClick={() => handleVote(event.id, selectedOption)}
-                    disabled={!selectedOption}
-                  >
-                    Bình chọn
-                  </Button>
-                )}
+                      Vote
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </Layout>

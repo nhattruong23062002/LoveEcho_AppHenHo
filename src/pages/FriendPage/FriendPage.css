@@ -13,55 +13,6 @@
   justify-content: space-between;
   margin-bottom: 10px;
 }
-
-.friends-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px; 
-}
-
-.friend-item {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.friend-item:hover {
-  background-color: #f9f9f9; 
-}
-
-.avatar-friend {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%; 
-  object-fit: cover; 
-  margin-right: 16px; 
-}
-
-.friend-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.friend-name {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-}
-
-.friend-address {
-  font-size: 14px;
-  color: #666;
-  text-align: left;
-  margin: 0;
-}
-
 .avatar-friend-request {
   width: 50px;
   height: 50px;
@@ -84,10 +35,4 @@
 .button-refuse {
     background-color: red;
     color: #fff;
-}
-
-.type-friend {
-  display: flex;
-  justify-content: flex-end;
-  margin-left: auto; 
 }

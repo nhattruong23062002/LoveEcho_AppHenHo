@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaUserPlus, FaArrowRight } from "react-icons/fa";
+import { FaUserPlus, FaArrowRight, FaRegHeart, FaHeart } from "react-icons/fa";
 import axios from "axios";
 import "./homePage.css";
 import Layout from "../../layout/layout";
@@ -14,6 +14,7 @@ function HomePage() {
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [friendType, setFriendType] = useState(""); 
+  const [isHeartFilled, setIsHeartFilled] = useState(false); 
   const user = getUserFromLocalStorage();
   
   useEffect(() => {
@@ -27,8 +28,8 @@ function HomePage() {
           )
         : response.data;
 
-      setUsers(filteredUsers);
-      console.log("filteredUsers",filteredUsers)
+        setUsers(filteredUsers);
+        console.log("filteredUsers", filteredUsers);
         if (filteredUsers.length > 0) {
           setCurrentUserIndex(Math.floor(Math.random() * filteredUsers.length));
         }
@@ -38,6 +39,7 @@ function HomePage() {
 
   const handleNextUser = () => {
     setCurrentUserIndex((prevIndex) => (prevIndex + 1) % users.length);
+    setIsHeartFilled(false); 
   };
 
   const handleAddFriendClick = () => {
@@ -78,6 +80,9 @@ function HomePage() {
       });
   };
 
+  const handleHeartClick = () => {
+    setIsHeartFilled((prev) => !prev);
+  };
 
   return (
     <Layout>
@@ -93,6 +98,15 @@ function HomePage() {
               <p>{users[currentUserIndex]?.address}</p>
             </div>
             <ul className="wrapper-icon">
+              <li className="item-icon">
+                <Link to="#" onClick={handleHeartClick}>
+                  {isHeartFilled ? (
+                    <FaHeart size={70} color="#f03e6a" />
+                  ) : (
+                    <FaRegHeart size={70} color="#f03e6a" />
+                  )}
+                </Link>
+              </li>
               <li className="item-icon">
                 <Link to="#" onClick={handleAddFriendClick}>
                   <FaUserPlus size={70} color="#f03e6a" />

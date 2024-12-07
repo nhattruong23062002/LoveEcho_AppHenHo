@@ -8,8 +8,8 @@
       "address": "Paris, France",
       "friends": [
         3,
-        4,
-        2
+        2,
+        4
       ],
       "events": [
         1
@@ -17,12 +17,10 @@
       "image": "https://images2.thanhnien.vn/528068263637045248/2023/11/10/be2-16996417889381216952812.jpg",
       "friendGroups": {
         "closeFriends": [],
-        "colleagues": [
-          4,
-          2
-        ],
+        "colleagues": [],
         "social": [
-          3
+          3,
+          4
         ]
       },
       "friendRequests": [
@@ -31,12 +29,24 @@
           "toUserId": 1,
           "status": "complete",
           "friendType": "colleagues"
+        },
+        {
+          "fromUserId": 10,
+          "toUserId": 1,
+          "status": "pending",
+          "friendType": "colleagues"
+        },
+        {
+          "fromUserId": 9,
+          "toUserId": 1,
+          "status": "pending",
+          "friendType": "closeFriends"
         }
       ]
     },
     {
       "id": "2",
-      "username": "jane_smith",
+      "username": "Jane Smith",
       "email": "jane.smith@example.com",
       "password": "123123",
       "address": "New York, USA",
@@ -68,7 +78,7 @@
     },
     {
       "id": "3",
-      "username": "alex_lee",
+      "username": "Alex Lee",
       "email": "alex.lee@example.com",
       "friends": [
         1
@@ -106,10 +116,10 @@
       "image": "https://img.tripi.vn/cdn-cgi/image/width=700,height=700/https://gcs.tripi.vn/public-tripi/tripi-feed/img/474095oee/hinh-anh-gai-han_100342280.jpg",
       "friendGroups": {
         "closeFriends": [],
-        "colleagues": [
+        "colleagues": [],
+        "social": [
           1
-        ],
-        "social": []
+        ]
       },
       "friendRequests": [
         {
@@ -128,7 +138,7 @@
       "address": "Da Nang, Viet Nam",
       "friends": [],
       "events": [],
-      "image": "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+      "image": "https://i.pinimg.com/736x/97/78/5f/97785fd589f2618bfee98a830b262618.jpg",
       "friendGroups": {
         "closeFriends": [],
         "colleagues": [],
@@ -151,7 +161,101 @@
       "address": "Ha Noi, Viet Nam",
       "friends": [],
       "events": [],
-      "image": "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+      "image": "https://cdn-i.vtcnews.vn/files/lcm/2017/09/06/75f79437-cc0e-4bbe-b4c2-6f35323a8c5cgong-3-153457.jpg",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": [
+        {
+          "fromUserId": 1,
+          "toUserId": 6,
+          "status": "pending",
+          "friendType": "closeFriends"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "email": "huynhngan@gmail.com",
+      "username": "Huynh Ngan",
+      "password": "222222",
+      "address": "Sai Gon, Viet Nam",
+      "friends": [],
+      "events": [],
+      "image": "https://i.pinimg.com/736x/c7/77/24/c777240f1be66538e55c3a50c7a71cc3.jpg",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": [
+        {
+          "fromUserId": 1,
+          "toUserId": 7,
+          "status": "pending",
+          "friendType": "colleagues"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "email": "hoaithuong@gmail.com",
+      "username": "Hoai Thuong",
+      "password": "010101",
+      "address": "Hoi An, Viet Nam",
+      "friends": [],
+      "events": [],
+      "image": "https://icdn.24h.com.vn/upload/1-2023/images/2023-02-17/Co-gai-Han-Quoc-so-huu-giao-dien-duoc-vi-nhu-bup-be-ngoai-doi-thuc-co-gai-han-quoc-dep-nhu-bup-be16-1676606509-127-width1080height1350.jpg",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": []
+    },
+    {
+      "id": "9",
+      "email": "phuonghang@gmail.com",
+      "username": "Phuong hang",
+      "password": "123456",
+      "address": "Nagasaki, Japan",
+      "friends": [],
+      "events": [],
+      "image": "https://i.pinimg.com/736x/c7/77/24/c777240f1be66538e55c3a50c7a71cc3.jpg",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": []
+    },
+    {
+      "id": "10",
+      "email": "leo@gmail.com",
+      "username": "Lionel Messi",
+      "password": "123456",
+      "address": "Rosario, Argentina",
+      "friends": [],
+      "events": [],
+      "image": "https://media.bongda.com.vn/files/duong.nguyen/2018/06/15/10-lionel-messi-2013.jpg",
+      "friendGroups": {
+        "closeFriends": [],
+        "colleagues": [],
+        "social": []
+      },
+      "friendRequests": []
+    },
+    {
+      "id": "11",
+      "email": "son@gmail.com",
+      "username": "Son heung-min",
+      "password": "222222",
+      "address": "Seoul, Korea",
+      "friends": [],
+      "events": [],
+      "image": "https://voguesg.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2024/07/05113933/Vogue-Singapore_Son-Heung-Min-for-Ralph-Lauren-Polo-67-edt-680x1020.jpg",
       "friendGroups": {
         "closeFriends": [],
         "colleagues": [],
@@ -162,42 +266,18 @@
   ],
   "events": [
     {
-      "id": "slz9fq",
-      "name": "Eat Lunch",
-      "options": [
-        {
-          "id": "option-0",
-          "name": "Home A",
-          "status": "pending",
-          "votes": 0
-        },
-        {
-          "id": "option-1",
-          "name": "Home B",
-          "status": "pending",
-          "votes": 0
-        }
-      ],
-      "friends": [
-        2,
-        4,
-        3,
-        1
-      ]
-    },
-    {
-      "id": "0v1f3w",
+      "id": "1z74l",
       "name": "Eat Dinner",
       "options": [
         {
           "id": "option-0",
-          "name": "Home Nguyen",
+          "name": "Home A - 9:00 PM",
           "status": "pending",
           "votes": 0
         },
         {
           "id": "option-1",
-          "name": "Home Hung",
+          "name": "Home B - 10:00 PM",
           "status": "pending",
           "votes": 0
         }
@@ -205,6 +285,7 @@
       "friends": [
         2,
         3,
+        4,
         1
       ]
     }
